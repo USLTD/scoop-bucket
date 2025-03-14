@@ -16,17 +16,17 @@
     "bin": [
         [
             "dnSpy.Console.exe",
-            "dnSpyEx.Console-nightly"
+            "dnspyex.console"
         ],
         [
             "dnSpy.exe",
-            "dnSpyEx-nightly"
+            "dnspyex"
         ]
     ],
     "shortcuts": [
         [
             "dnSpy.exe",
-            "dnSpyEx Nightly"
+            "dnSpyEx (Nightly)"
         ]
     ],
     "checkver": {
