@@ -16,11 +16,11 @@
     "bin": [
         [
             "dnSpy.Console.exe",
-            "dnspyex.console"
+            "dnspyex.console-nightly"
         ],
         [
             "dnSpy.exe",
-            "dnspyex"
+            "dnspyex-nightly"
         ]
     ],
     "shortcuts": [
