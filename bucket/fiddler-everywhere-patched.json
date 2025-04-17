@@ -1,5 +1,5 @@
 {
-    "version": "6.3.0",
+    "version": "6.4.0",
     "description": "The free web debugging proxy for any browser, system or platform.",
     "homepage": "https://www.telerik.com/fiddler",
     "license": {
@@ -8,8 +8,8 @@
     },
     "architecture": {
         "64bit": {
-            "url": "https://nightly.link/USLTD/fiddler-everywhere-patch-automated/workflows/cp_pull_upstream/main/Fiddler-Everywhere-V6.3.0-Patched.zip",
-            "hash": "AB91C01D3E008423DC0298510FECDDE9C59C45E45EEFB5058E57E2646C27806D"
+            "url": "https://nightly.link/USLTD/fiddler-everywhere-patch-automated/workflows/cp_pull_upstream/main/Fiddler-Everywhere-V6.4.0-Patched.zip",
+            "hash": "3d7fbc4baafd612d176f9dafa12542f7f31e289adb7f1ca2475cda6c08d0553d"
         }
     },
     "shortcuts": [
