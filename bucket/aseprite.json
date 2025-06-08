@@ -16,6 +16,9 @@
             "hash": "sha256:6ca26689242b36362f520c604bc3d6c50f59eb45ae902694b6e39326c962ec15"
         }
     },
+    "persist": [
+        "data/extensions"
+    ],
     "bin": [
         "aseprite.exe"
     ],
