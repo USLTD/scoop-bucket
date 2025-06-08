@@ -6,16 +6,7 @@
         "identifier": "Proprietary",
         "url": "https://github.com/aseprite/aseprite/raw/refs/heads/main/EULA.txt"
     },
-    "architecture": {
-        "64bit": {
-            "url": "https://nightly.link/USLTD/aseprite-autobuilds/workflows/windows-automatic-build/main/aseprite-v1.3.14-beta1-windows-x64.zip",
-            "hash": "sha256:56d44863b543780ec30a064522ba5660a4f118165044a4815fd7c6144cc0e713"
-        },
-        "32bit": {
-            "url": "https://nightly.link/USLTD/aseprite-autobuilds/workflows/windows-automatic-build/main/aseprite-v1.3.14-beta1-windows-x86.zip",
-            "hash": "sha256:c805db0622b539a9e63cb368597c775cfb5072bb209cde16cf97053dcfe7013e"
-        }
-    },
+    "url": "https://github.com/aseprite/aseprite/raw/refs/heads/main/EULA.txt",
     "bin": [
         "aseprite.exe"
     ],
