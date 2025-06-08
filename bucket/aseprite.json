@@ -39,5 +39,10 @@
         }
     },
     "depends": ["aseprite-license"],
+    "pre_install": [
+        "if (!(Test-Path \"$(appdir aseprite-license)\\current\\EULA.txt\")) {",
+        "    throw \"'aseprite-license' missing... Determined current user to not be Luka Mamukashvili... Aborting installation as per Aseprite EULA\"",
+        "}"
+    ],
     "notes": "You may not use this package unless you are owner of this bucket, i.e. Luka Mamukashvili (USLTD)"
 }
