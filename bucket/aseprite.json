@@ -9,7 +9,7 @@
     "architecture": {
         "64bit": {
             "url": "https://nightly.link/aseprite/aseprite/workflows/windows-build/main/aseprite-1.3.14-beta1-windows-x64.zip",
-            "hash": "sha256:5496bac16042c49e5f71aa25b512416a1ed6379f1231d2d108450b3489ca47bd"
+            "hash": "sha256:8caa29a61fa7c423b4957060fe9dda712bd90d13cdb53e206be288391d7b806a"
         },
         "32bit": {
             "url": "https://nightly.link/aseprite/aseprite/workflows/windows-build/main/aseprite-1.3.14-beta1-windows-x86.zip",
