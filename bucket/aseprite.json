@@ -9,11 +9,11 @@
     "architecture": {
         "64bit": {
             "url": "https://nightly.link/aseprite/aseprite/workflows/windows-build/main/aseprite-1.3.14-beta1-windows-x64.zip",
-            "hash": "auto"
+            "hash": "sha256:5496bac16042c49e5f71aa25b512416a1ed6379f1231d2d108450b3489ca47bd"
         },
         "32bit": {
             "url": "https://nightly.link/aseprite/aseprite/workflows/windows-build/main/aseprite-1.3.14-beta1-windows-x86.zip",
-            "hash": "auto"
+            "hash": "sha256:6ca26689242b36362f520c604bc3d6c50f59eb45ae902694b6e39326c962ec15"
         }
     },
     "bin": [
