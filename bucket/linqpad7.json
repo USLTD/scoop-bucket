@@ -1,0 +1,64 @@
+{
+    "version": "7.8.10",
+    "description": "The .NET programmer’s playground",
+    "homepage": "https://www.linqpad.net",
+    "license": {
+        "identifier": "Freeware",
+        "url": "https://www.linqpad.net/eula.txt"
+    },
+    "url": "https://linqpad.azureedge.net/public/LINQPad7.zip?cache=7.8.10.729423",
+    "hash": "4449db9bac597509e133a9b2002d628a2516bf73626349151b2e876c656ff00b",
+    "architecture": {
+        "64bit": {
+            "bin": [
+                [
+                    "LPRun7-x64.exe",
+                    "lprun"
+                ],
+                [
+                    "LINQPad7-x64.exe",
+                    "linqpad"
+                ],
+                [
+                    "LPRun7-x86.exe",
+                    "lprun-x86"
+                ],
+                [
+                    "LINQPad7-x86.exe",
+                    "linqpad-x86"
+                ]
+            ],
+            "shortcuts": [
+                [
+                    "LINQPad7-x64.exe",
+                    "LINQPad 7",
+                    "-noupdate"
+                ],
+                [
+                    "LINQPad7-x86.exe",
+                    "LINQPad 7 (x86)",
+                    "-noupdate"
+                ]
+            ]
+        },
+        "32bit": {
+            "bin": [
+                [
+                    "LPRun7-x86.exe",
+                    "lprun"
+                ],
+                [
+                    "LINQPad7-x86.exe",
+                    "linqpad"
+                ]
+            ],
+            "shortcuts": [
+                [
+                    "LINQPad7-x86.exe",
+                    "LINQPad 7",
+                    "-noupdate"
+                ]
+            ]
+        }
+    }
+}
