@@ -1,5 +1,5 @@
 {
-    "version": "v1.3.14-beta1",
+    "version": "v1.3.14.2",
     "description": "Animated sprite editor & pixel art tool",
     "homepage": "https://www.aseprite.org",
     "license": {
@@ -8,12 +8,12 @@
     },
     "architecture": {
         "64bit": {
-            "url": "https://github.com/USLTD/aseprite-builds/releases/download/v1.3.14-beta1/aseprite-v1.3.14-beta1-windows-x64.zip",
-            "hash": "sha256:405a909921d6c1eb1b113f4f3700d5090bca8b857e5fad790117212cbf718a32"
+            "url": "https://github.com/USLTD/aseprite-builds/releases/download/v1.3.14.2/aseprite-v1.3.14.2-windows-x64.zip",
+            "hash": "sha256:8955158378cca6f12b69d09519cb964e5f8686a62869d85d2685d5dc8eba3899"
         },
         "32bit": {
-            "url": "https://github.com/USLTD/aseprite-builds/releases/download/v1.3.14-beta1/aseprite-v1.3.14-beta1-windows-x86.zip",
-            "hash": "sha256:9b34ce7b4f069408fa597b45979282bc7693eb560d86c2ec41a16d3c66a41136"
+            "url": "https://github.com/USLTD/aseprite-builds/releases/download/v1.3.14.2/aseprite-v1.3.14.2-windows-x86.zip",
+            "hash": "sha256:452deb4e9ac27c8c25c138ddd15f061954fe0a42d9ba59c01e0df2306f11c158"
         }
     },
     "bin": [
@@ -31,10 +31,10 @@
     "autoupdate": {
         "architecture": {
             "64bit": {
-                "url": "https://github.com/USLTD/aseprite-builds/releases/download/v$version/aseprite-v$version-windows-x64.zip"
+                "url": "https://github.com/USLTD/aseprite-builds/releases/download/$version/aseprite-$version-windows-x64.zip"
             },
             "32bit": {
-                "url": "https://github.com/USLTD/aseprite-builds/releases/download/v$version/aseprite-v$version-windows-x86.zip"
+                "url": "https://github.com/USLTD/aseprite-builds/releases/download/$version/aseprite-$version-windows-x86.zip"
             }
         }
     },
