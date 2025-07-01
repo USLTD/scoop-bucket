@@ -5,11 +5,11 @@
     "license": "GPL-3.0-only",
     "architecture": {
         "64bit": {
-            "url": "https://nightly.link/dnSpyEx/dnSpy/actions/runs/15213486004/dnSpy-net-win64.zip#/dl.7z",
+            "url": "https://nightly.link/dnSpyEx/dnSpy/actions/runs/15213486004/dnSpy-net-win64.zip",
             "hash": "5c32a9969a74c6a120b964d43da4e5e46786f6c4a462520cf82368254cebca2f"
         },
         "32bit": {
-            "url": "https://nightly.link/dnSpyEx/dnSpy/actions/runs/15213486004/dnSpy-net-win32.zip#/dl.7z",
+            "url": "https://nightly.link/dnSpyEx/dnSpy/actions/runs/15213486004/dnSpy-net-win32.zip",
             "hash": "cc965b7afc010ca6987179e934d3dc3c1f60c61282eee80967ed459a203052b3"
         }
     },
@@ -28,6 +28,15 @@
             "dnSpy.exe",
             "dnSpyEx (Nightly)"
         ]
+    ],
+    "persist": "bin\\Extensions",
+    "pre_install": [
+        "$manifest.persist | ForEach-Object {",
+        "    $dest = \"$dir\\$_\"",
+        "    if (-not (Test-Path $dest -PathType Container)) {",
+        "       New-Item $dest -Force -ItemType Directory | Out-Null",
+        "    }",
+        "}"
     ],
     "checkver": {
         "url": "https://api.github.com/repos/dnSpyEx/dnSpy/actions/workflows/build.yml/runs?status=success&per_page=1&exclude_pull_requests=true",
