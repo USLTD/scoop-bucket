@@ -9,11 +9,11 @@
     "architecture": {
         "64bit": {
             "url": "https://github.com/USLTD/aseprite-builds/releases/download/v1.3.14.2/aseprite-v1.3.14.2-windows-x64.zip",
-            "hash": "sha256:8955158378cca6f12b69d09519cb964e5f8686a62869d85d2685d5dc8eba3899"
+            "hash": "sha256:83f7cdf728ea38ce5cb4ae8ad57df5dbf3be9bb8a9d4792b83db2d233bcd480b"
         },
         "32bit": {
             "url": "https://github.com/USLTD/aseprite-builds/releases/download/v1.3.14.2/aseprite-v1.3.14.2-windows-x86.zip",
-            "hash": "sha256:452deb4e9ac27c8c25c138ddd15f061954fe0a42d9ba59c01e0df2306f11c158"
+            "hash": "sha256:1bda4f016018294ab596a38e389ef51e2abbf6acb14bd60c98ac1f4612594231"
         }
     },
     "bin": [
