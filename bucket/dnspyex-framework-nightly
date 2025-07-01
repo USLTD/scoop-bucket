@@ -1,0 +1,61 @@
+{
+    "version": "2025-05-23-run709-id15213486004",
+    "description": "Revival of the well known .NET debugger and assembly editor, dnSpy",
+    "homepage": "https://github.com/dnSpyEx/dnSpy",
+    "license": "GPL-3.0-only",
+    "url": "https://nightly.link/dnSpyEx/dnSpy/actions/runs/15213486004/dnSpy-netframework.zip",
+    "hash": "e07b14dccbf9ba3e6bc6d22ad149540c1ade3a132130ce1b9a7e3469c2d07f50"
+    "bin": [
+        [
+            "dnSpy.Console.exe",
+            "dnspyex-framework.console-nightly"
+        ]
+    ],
+    "architecture": {
+        "64bit": {
+            "bin": [
+                [
+                    "dnSpy.exe",
+                    "dnspyex-framework-nightly"
+                ]
+            ],
+            "shortcuts": [
+                [
+                    "dnSpy.exe",
+                    "dnSpyEx Framework (Nightly"
+                ]
+            ],
+        },
+        "32bit": {
+            "bin": [
+                [
+                    "dnSpy-x86.exe",
+                    "dnspyex-framework-nightly"
+                ]
+            ],
+            "shortcuts": [
+                [
+                    "dnSpy-x86.exe",
+                    "dnSpyEx Framework (Nightly"
+                ]
+            ],
+        }
+    },
+    "persist": "bin\\Extensions",
+    "pre_install": [
+        "$manifest.persist | ForEach-Object {",
+        "    $dest = \"$dir\\$_\"",
+        "    if (-not (Test-Path $dest -PathType Container)) {",
+        "       New-Item $dest -Force -ItemType Directory | Out-Null",
+        "    }",
+        "}"
+    ],
+    "checkver": {
+        "url": "https://api.github.com/repos/dnSpyEx/dnSpy/actions/workflows/build.yml/runs?status=success&per_page=1&exclude_pull_requests=true",
+        "regex": "{\"id\":(?<runid>\\d+),.*?\"run_number\":(?<runnumber>\\d+).*?\"created_at\":\"(?<date>\\d+-\\d+-\\d+)T",
+        "replace": "${date}-run${runnumber}-id${runid}"
+    },
+    "autoupdate": {
+      "url": "https://nightly.link/dnSpyEx/dnSpy/actions/runs/$matchRunid/dnSpy-netframework.zip"
+    }
+}
