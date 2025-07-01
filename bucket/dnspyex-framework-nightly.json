@@ -5,15 +5,13 @@
     "license": "GPL-3.0-only",
     "url": "https://nightly.link/dnSpyEx/dnSpy/actions/runs/15213486004/dnSpy-netframework.zip",
     "hash": "e07b14dccbf9ba3e6bc6d22ad149540c1ade3a132130ce1b9a7e3469c2d07f50"
-    "bin": [
-        [
-            "dnSpy.Console.exe",
-            "dnspyex-framework.console-nightly"
-        ]
-    ],
     "architecture": {
         "64bit": {
             "bin": [
+                [
+                    "dnSpy.Console.exe",
+                    "dnspyex-framework.console-nightly"
+                ],
                 [
                     "dnSpy.exe",
                     "dnspyex-framework-nightly"
@@ -28,6 +26,10 @@
         },
         "32bit": {
             "bin": [
+                [
+                    "dnSpy.Console.exe",
+                    "dnspyex-framework.console-nightly"
+                ],
                 [
                     "dnSpy-x86.exe",
                     "dnspyex-framework-nightly"
