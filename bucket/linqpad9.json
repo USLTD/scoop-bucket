@@ -10,7 +10,7 @@
         ".Net SDK": "dotnet-sdk"
     },
     "url": "https://linqpad.azureedge.net/preview/LINQPad9-Beta.zip?cache=9.1.4.3367529",
-    "hash": "f444160b5b8bdeb77a13368245168b424513cd498f8f7682e51eee5cb0365ca7",
+    "hash": "389e1512b48dc541393282afd3559d7c98240e1373bf2476d7a04471feef70b2",
     "architecture": {
         "64bit": {
             "bin": [
