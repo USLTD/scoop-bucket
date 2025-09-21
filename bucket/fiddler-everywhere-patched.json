@@ -9,7 +9,7 @@
     "architecture": {
         "64bit": {
             "url": "https://nightly.link/USLTD/fiddler-everywhere-patch-automated/workflows/cp_pull_upstream/main/Fiddler-Everywhere-V7.0.0-Patched.zip",
-            "hash": "fc2fa53557a71a7b0f28a0465150ee13fbb6fcd0d916b2476a25bf0443e4c97a"
+            "hash": "sha256:0043b29af81b5e7d74c21b90adf34f0308d71d951cd1315271791051ead534b8"
         }
     },
     "shortcuts": [
