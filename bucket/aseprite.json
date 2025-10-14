@@ -1,5 +1,5 @@
 {
-    "version": "v1.3.14.2",
+    "version": "v1.3.15.2",
     "description": "Animated sprite editor & pixel art tool",
     "homepage": "https://www.aseprite.org",
     "license": {
@@ -8,11 +8,11 @@
     },
     "architecture": {
         "64bit": {
-            "url": "https://github.com/USLTD/aseprite-builds/releases/download/v1.3.14.2/aseprite-v1.3.14.2-windows-x64.zip",
+            "url": "https://github.com/USLTD/aseprite-builds/releases/download/v1.3.15.2/aseprite-v1.3.15.2-windows-x64.zip",
             "hash": "sha256:83f7cdf728ea38ce5cb4ae8ad57df5dbf3be9bb8a9d4792b83db2d233bcd480b"
         },
         "32bit": {
-            "url": "https://github.com/USLTD/aseprite-builds/releases/download/v1.3.14.2/aseprite-v1.3.14.2-windows-x86.zip",
+            "url": "https://github.com/USLTD/aseprite-builds/releases/download/v1.3.15.2/aseprite-v1.3.15.2-windows-x86.zip",
             "hash": "sha256:1bda4f016018294ab596a38e389ef51e2abbf6acb14bd60c98ac1f4612594231"
         }
     },
