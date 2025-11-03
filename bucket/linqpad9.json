@@ -16,19 +16,19 @@
             "bin": [
                 [
                     "LPRun9-x64.exe",
-                    "lprun"
+                    "lprun9"
                 ],
                 [
                     "LINQPad9-x64.exe",
-                    "linqpad"
+                    "linqpad9"
                 ],
                 [
                     "LPRun9-x86.exe",
-                    "lprun-x86"
+                    "lprun9-x86"
                 ],
                 [
                     "LINQPad9-x86.exe",
-                    "linqpad-x86"
+                    "linqpad9-x86"
                 ]
             ],
             "shortcuts": [
