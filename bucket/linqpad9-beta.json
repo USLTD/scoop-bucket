@@ -16,30 +16,30 @@
             "bin": [
                 [
                     "LPRun9-x64.exe",
-                    "lprun"
+                    "lprun9-beta"
                 ],
                 [
                     "LINQPad9-x64.exe",
-                    "linqpad"
+                    "linqpad9-beta"
                 ],
                 [
                     "LPRun9-x86.exe",
-                    "lprun-x86"
+                    "lprun9-beta-x86"
                 ],
                 [
                     "LINQPad9-x86.exe",
-                    "linqpad-x86"
+                    "linqpad9-beta-x86"
                 ]
             ],
             "shortcuts": [
                 [
                     "LINQPad9-x64.exe",
-                    "LINQPad 9",
+                    "LINQPad 9 Beta",
                     "-noupdate"
                 ],
                 [
                     "LINQPad9-x86.exe",
-                    "LINQPad 9 (x86)",
+                    "LINQPad 9 Beta (x86)",
                     "-noupdate"
                 ]
             ]
@@ -48,17 +48,17 @@
             "bin": [
                 [
                     "LPRun9-x86.exe",
-                    "lprun"
+                    "lprun9-beta"
                 ],
                 [
                     "LINQPad9-x86.exe",
-                    "linqpad"
+                    "linqpad9-beta"
                 ]
             ],
             "shortcuts": [
                 [
                     "LINQPad9-x86.exe",
-                    "LINQPad 9",
+                    "LINQPad 9 Beta",
                     "-noupdate"
                 ]
             ]
@@ -83,29 +83,29 @@
                 "bin": [
                     [
                         "LPRun$majorVersion-x64.exe",
-                        "lprun"
+                        "lprun9-beta"
                     ],
                     [
                         "LINQPad$majorVersion-x64.exe",
-                        "linqpad"
+                        "linqpad9-beta"
                     ],
                     [
                         "LPRun$majorVersion-x86.exe",
-                        "lprun-x86"
+                        "lprun9-beta-x86"
                     ],
                     [
                         "LINQPad$majorVersion-x86.exe",
-                        "linqpad-x86"
+                        "linqpad9-beta-x86"
                     ]
                 ],
                 "shortcuts": [
                     [
                         "LINQPad$majorVersion-x64.exe",
-                        "LINQPad $majorVersion"
+                        "LINQPad $majorVersion Beta"
                     ],
                     [
                         "LINQPad$majorVersion-x86.exe",
-                        "LINQPad $majorVersion (x86)"
+                        "LINQPad $majorVersion Beta (x86)"
                     ]
                 ]
             },
@@ -113,17 +113,17 @@
                 "bin": [
                     [
                         "LPRun$majorVersion-x86.exe",
-                        "lprun"
+                        "lprun9-beta"
                     ],
                     [
                         "LINQPad$majorVersion-x86.exe",
-                        "linqpad"
+                        "linqpad9-beta"
                     ]
                 ],
                 "shortcuts": [
                     [
                         "LINQPad$majorVersion-x86.exe",
-                        "LINQPad $majorVersion"
+                        "LINQPad $majorVersion Beta"
                     ]
                 ]
             }
