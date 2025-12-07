@@ -74,56 +74,56 @@
             "$releaseUrl = if ($null -eq $releaseUrl) { $res.Headers['Location'] } else { $releaseUrl }",
             "$releaseUrl"
         ],
-        "regex": "\\.zip\\?cache=(?<ver>(?<version>\\d+\\.\\d+\\.\\d+)[\\d.]+)"
+        "regex": "\\?cache=(?<ver>(?<version>\\d+\\.\\d+\\.\\d+)[\\d.]+)"
     },
     "autoupdate": {
-        "url": "https://linqpad.azureedge.net/preview/LINQPad$majorVersion-Beta.zip?cache=$matchVer",
+        "url": "https://linqpad.azureedge.net/preview/LINQPad9-Beta.zip?cache=$matchVer",
         "architecture": {
             "64bit": {
                 "bin": [
                     [
-                        "LPRun$majorVersion-x64.exe",
+                        "LPRun9-x64.exe",
                         "lprun9-beta"
                     ],
                     [
-                        "LINQPad$majorVersion-x64.exe",
+                        "LINQPad9-x64.exe",
                         "linqpad9-beta"
                     ],
                     [
-                        "LPRun$majorVersion-x86.exe",
+                        "LPRun9-x86.exe",
                         "lprun9-beta-x86"
                     ],
                     [
-                        "LINQPad$majorVersion-x86.exe",
+                        "LINQPad9-x86.exe",
                         "linqpad9-beta-x86"
                     ]
                 ],
                 "shortcuts": [
                     [
-                        "LINQPad$majorVersion-x64.exe",
-                        "LINQPad $majorVersion Beta"
+                        "LINQPad9-x64.exe",
+                        "LINQPad 9 Beta"
                     ],
                     [
-                        "LINQPad$majorVersion-x86.exe",
-                        "LINQPad $majorVersion Beta (x86)"
+                        "LINQPad9-x86.exe",
+                        "LINQPad 9 Beta (x86)"
                     ]
                 ]
             },
             "32bit": {
                 "bin": [
                     [
-                        "LPRun$majorVersion-x86.exe",
+                        "LPRun9-x86.exe",
                         "lprun9-beta"
                     ],
                     [
-                        "LINQPad$majorVersion-x86.exe",
+                        "LINQPad9-x86.exe",
                         "linqpad9-beta"
                     ]
                 ],
                 "shortcuts": [
                     [
-                        "LINQPad$majorVersion-x86.exe",
-                        "LINQPad $majorVersion Beta"
+                        "LINQPad9-x86.exe",
+                        "LINQPad 9 Beta"
                     ]
                 ]
             }
