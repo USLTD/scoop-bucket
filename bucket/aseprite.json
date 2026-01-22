@@ -1,5 +1,5 @@
 {
-    "version": "v1.3.15.2",
+    "version": "v1.3.16",
     "description": "Animated sprite editor & pixel art tool",
     "homepage": "https://www.aseprite.org",
     "license": {
@@ -8,12 +8,12 @@
     },
     "architecture": {
         "64bit": {
-            "url": "https://github.com/USLTD/aseprite-builds/releases/download/v1.3.15.2/aseprite-v1.3.15.2-windows-x64.zip",
-            "hash": "sha256:83f7cdf728ea38ce5cb4ae8ad57df5dbf3be9bb8a9d4792b83db2d233bcd480b"
+            "url": "https://github.com/USLTD/aseprite-builds/releases/download/v1.3.16/aseprite-v1.3.16-windows-x64.zip",
+            "hash": "sha256:8f6de9b87e64908a0c967274bf9d09ebdc4d9069de974cca87da697e372a1d75"
         },
         "32bit": {
-            "url": "https://github.com/USLTD/aseprite-builds/releases/download/v1.3.15.2/aseprite-v1.3.15.2-windows-x86.zip",
-            "hash": "sha256:1bda4f016018294ab596a38e389ef51e2abbf6acb14bd60c98ac1f4612594231"
+            "url": "https://github.com/USLTD/aseprite-builds/releases/download/v1.3.16/aseprite-v1.3.16-windows-x86.zip",
+            "hash": "sha256:818fcd42c1ef756cf129cdba919a8371702e7df95fa13fbdc847d47f51a5a2d6"
         }
     },
     "bin": [
@@ -38,11 +38,5 @@
             }
         }
     },
-    "depends": ["aseprite-license"],
-    "pre_install": [
-        "if (!(Test-Path \"$(appdir aseprite-license)\\current\\EULA.txt\")) {",
-        "    throw \"'aseprite-license' missing... Determined current user to not be Luka Mamukashvili... Aborting installation as per Aseprite EULA\"",
-        "}"
-    ],
     "notes": "You may not use this package unless you are owner of this bucket, i.e. Luka Mamukashvili (USLTD)"
 }
