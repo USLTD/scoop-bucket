@@ -99,6 +99,10 @@ Write-Host "`n========================================" -ForegroundColor Cyan
 Write-Host "Aseprite Repository Access Verification" -ForegroundColor Cyan
 Write-Host "========================================`n" -ForegroundColor Cyan
 
+Write-Host "Note: The aseprite-builds repository is INTENTIONALLY PRIVATE" -ForegroundColor Yellow
+Write-Host "      to comply with Aseprite's Terms of Service." -ForegroundColor Yellow
+Write-Host "      If you are not an authorized user, failures are expected.`n" -ForegroundColor Yellow
+
 # Check if manifest exists
 if (-not (Test-Path $ManifestPath)) {
     Write-Status "Manifest not found at: $ManifestPath" -Type Error
@@ -249,28 +253,39 @@ Write-Host "========================================`n" -ForegroundColor Cyan
 if (-not $asset64Accessible -or -not $asset32Accessible) {
     Write-Host "❌ Release assets are NOT accessible"
     Write-Host ""
-    Write-Host "To fix this issue, choose one of the following options:"
+    Write-Host "This is EXPECTED if you are not an authorized user." -ForegroundColor Yellow
     Write-Host ""
-    Write-Host "  Option 1 (Recommended): Make releases public"
-    Write-Host "    • Go to: https://github.com/$RepositoryOwner/$RepositoryName/settings"
-    Write-Host "    • Ensure releases are accessible even if repository is private"
-    Write-Host "    • GitHub allows public release assets in private repositories"
+    Write-Host "The aseprite-builds repository is intentionally private to comply"
+    Write-Host "with Aseprite's Terms of Service, which prohibit redistribution of"
+    Write-Host "compiled binaries."
     Write-Host ""
-    Write-Host "  Option 2: Configure authentication"
-    Write-Host "    • Set up GITHUB_TOKEN with repository access"
-    Write-Host "    • Add token to: https://github.com/$env:GITHUB_REPOSITORY/settings/secrets/actions"
-    Write-Host "    • Update workflows to pass token to Scoop"
+    Write-Host "If you ARE an authorized user, configure authentication:"
     Write-Host ""
-    Write-Host "  Option 3: Use GitHub Actions artifacts"
-    Write-Host "    • Use nightly.link service for automated builds"
-    Write-Host "    • See: fiddler-everywhere-patched.json for example"
+    Write-Host "  Step 1: Create a GitHub Personal Access Token (PAT)"
+    Write-Host "    • Go to: https://github.com/settings/tokens"
+    Write-Host "    • Create token with 'repo' scope"
+    Write-Host ""
+    Write-Host "  Step 2: Configure Git credentials"
+    Write-Host "    • Option A: Use Git Credential Manager (recommended)"
+    Write-Host "      git config --global credential.helper manager-core"
+    Write-Host ""
+    Write-Host "    • Option B: Store credentials"
+    Write-Host "      git config --global credential.helper store"
+    Write-Host ""
+    Write-Host "  Step 3: Test authentication"
+    Write-Host "    git ls-remote https://github.com/$RepositoryOwner/$RepositoryName"
     Write-Host ""
     Write-Host "For detailed instructions, see: ASEPRITE_ACCESS_SETUP.md"
+    Write-Host ""
+    Write-Host "If you are NOT an authorized user:"
+    Write-Host "  • Contact the bucket maintainer (Luka Mamukashvili / USLTD) for access"
+    Write-Host "  • You must own a valid Aseprite license"
 }
 else {
     Write-Host "✅ All release assets are accessible!"
     Write-Host ""
-    Write-Host "The manifest should work correctly for users."
+    Write-Host "Your authentication is properly configured."
+    Write-Host "You can install aseprite with: scoop install usltd/aseprite"
 }
 
 # Exit with appropriate code

@@ -1,153 +1,209 @@
 # Aseprite Manifest Access Configuration
 
-## Issue Summary
+## Overview
 
-The `aseprite` manifest in this bucket references the private repository `https://github.com/USLTD/aseprite-builds`. Currently, this repository is **not accessible** by the GitHub Actions workflows and standard Scoop installations, resulting in 404 errors when attempting to download releases.
+The `aseprite` manifest in this bucket references the **intentionally private** repository `https://github.com/USLTD/aseprite-builds`. This repository remains private to comply with Aseprite's Terms of Service, which prohibit redistribution of compiled binaries.
+
+### Build Process
+
+The aseprite builds follow this workflow:
+1. Detect new release in `aseprite/aseprite` (official public repository)
+2. Execute `USLTD/aseprite-builder` (public) GitHub Action to compile from source
+3. Upload compiled release to `USLTD/aseprite-builds` (private repository)
+
+This approach complies with Aseprite's license while using GitHub's infrastructure.
 
 ### Current Status
 
-- **Repository**: `https://github.com/USLTD/aseprite-builds` (Private)
-- **Access Status**: ❌ Not accessible (403/404 errors)
+- **Repository**: `https://github.com/USLTD/aseprite-builds` (Private - **Intentional**)
+- **Access Status**: ❌ Not publicly accessible (by design)
 - **Manifest Location**: `bucket/aseprite.json`
-- **Impact**: Users cannot install aseprite using this manifest without proper authentication
+- **Authorized Users**: Bucket owner (Luka Mamukashvili / USLTD) and explicitly granted collaborators
 
-### Test Results
+### Public Access Test Results
+
+Without authentication, the repository returns expected access denied errors:
 
 ```bash
-# Testing repository access
+# Testing repository access (expected to fail without auth)
 curl -I "https://github.com/USLTD/aseprite-builds"
-# Result: HTTP/1.1 404 Not Found
+# Result: HTTP/1.1 404 Not Found (private repository)
 
-# Testing release download
+# Testing release download (expected to fail without auth)
 curl -I "https://github.com/USLTD/aseprite-builds/releases/download/v1.3.16/aseprite-v1.3.16-windows-x64.zip"
-# Result: HTTP/1.1 404 Not Found
+# Result: HTTP/1.1 404 Not Found (private repository)
 ```
 
-## Solutions
+**This is the expected and intended behavior.**
 
-### Option 1: Make Releases Public (Recommended)
+## Why Repository Must Remain Private
 
-The most user-friendly solution is to make the releases in the `aseprite-builds` repository public while keeping the repository itself private. This allows users to download the release assets without authentication.
+⚠️ **Legal Compliance**: Aseprite's Terms of Service prohibit redistribution of compiled binaries. The repository must remain private to ensure only authorized users can access the builds.
 
-**Steps:**
+## Setup Instructions for Authorized Users
 
-1. Go to `https://github.com/USLTD/aseprite-builds/settings`
-2. Navigate to **Settings** → **General**
-3. Scroll to **Danger Zone** → **Change repository visibility**
-4. Consider: Keep the repository private but ensure releases are publicly accessible
+If you have been granted access to this private repository, follow these steps to configure Scoop for authenticated downloads:
 
-**OR** for individual releases:
+### Step 1: Create a GitHub Personal Access Token (PAT)
 
-1. Go to `https://github.com/USLTD/aseprite-builds/releases`
-2. For each release, ensure the assets are downloadable without authentication
-3. GitHub releases can be made public even for private repositories if the release assets are uploaded as "public" assets
+1. Go to https://github.com/settings/tokens
+2. Click **"Generate new token"** → **"Generate new token (classic)"**
+3. Configure the token:
+   - **Note**: `Scoop aseprite-builds access`
+   - **Expiration**: Choose appropriate expiration (90 days or longer)
+   - **Scopes**: Select `repo` (Full control of private repositories)
+4. Click **"Generate token"**
+5. **Copy the token immediately** (you won't be able to see it again)
 
-**Verification:**
-```bash
-curl -I "https://github.com/USLTD/aseprite-builds/releases/download/v1.3.16/aseprite-v1.3.16-windows-x64.zip"
-# Should return: HTTP/1.1 302 Found (redirect to actual download)
+### Step 2: Configure Git Credential Helper with Your Token
+
+Scoop uses Git to download releases from GitHub. Configure Git to use your token for authentication:
+
+**Option A: Using Git Credential Manager (Recommended for Windows)**
+
+```powershell
+# Install Git Credential Manager if not already installed
+winget install Git.Git
+
+# Configure git to use credential manager
+git config --global credential.helper manager-core
+
+# The next time you access the repository, you'll be prompted for credentials
+# Username: your-github-username
+# Password: paste-your-PAT-token
 ```
 
-### Option 2: Configure GitHub Token with Repository Access
+**Option B: Store Token in Git Config (Alternative)**
 
-Add a GitHub Personal Access Token (PAT) with access to the private repository.
+```powershell
+# Store credentials in Git config (WARNING: Token stored in plain text)
+git config --global credential.helper store
 
-**Steps:**
-
-1. **Create a Personal Access Token:**
-   - Go to https://github.com/settings/tokens
-   - Click "Generate new token" → "Generate new token (classic)"
-   - Select scopes:
-     - `repo` (Full control of private repositories)
-   - Generate and copy the token
-
-2. **Add Token to Repository Secrets:**
-   - Go to `https://github.com/USLTD/scoop-bucket/settings/secrets/actions`
-   - Click "New repository secret"
-   - Name: `ASEPRITE_BUILDS_TOKEN`
-   - Value: Paste the PAT
-   - Click "Add secret"
-
-3. **Update Excavator Workflow:**
-   - Modify `.github/workflows/excavator.yml` to include:
-     ```yaml
-     env:
-       SCOOP_GH_TOKEN: ${{ secrets.SCOOP_GH_TOKEN }}
-       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-       ASEPRITE_BUILDS_TOKEN: ${{ secrets.ASEPRITE_BUILDS_TOKEN }}
-     ```
-
-**Note:** This only helps with automated updates. End users still cannot install the package without their own authentication.
-
-### Option 3: Use GitHub Actions Artifacts via nightly.link
-
-If the builds are generated by GitHub Actions, you can use the `nightly.link` service to access artifacts without authentication, similar to other manifests in this bucket.
-
-**Example Pattern** (see `fiddler-everywhere-patched.json`):
-```json
-{
-  "url": "https://nightly.link/USLTD/aseprite-builds/workflows/build/main/aseprite-windows-x64.zip"
-}
+# Create credentials file manually
+$credPath = "$env:USERPROFILE\.git-credentials"
+$token = "ghp_YourTokenHere"  # Replace with your actual token
+$url = "https://${token}@github.com"
+Add-Content -Path $credPath -Value $url
 ```
 
-### Option 4: Update Repository Permissions
+**Option C: Configure URL with Embedded Token (Per-Repository)**
 
-Grant the GitHub Actions bot access to the private repository:
+```powershell
+# Configure git to use token for specific repository
+git config --global url."https://${token}@github.com/USLTD/aseprite-builds".insteadOf "https://github.com/USLTD/aseprite-builds"
+```
 
-1. Go to `https://github.com/USLTD/aseprite-builds/settings/access`
-2. Click "Invite a collaborator"
-3. Add the service account or grant organization-level access
-4. For organization repositories:
-   - Go to `https://github.com/organizations/USLTD/settings/actions`
-   - Under "Repository access", add `aseprite-builds` to the accessible repositories
+### Step 3: Test Authentication
 
-## Recommended Action Plan
+Test that your authentication works:
 
-**For bucket maintainers (USLTD/Luka Mamukashvili):**
+```powershell
+# Test access to private repository
+git ls-remote https://github.com/USLTD/aseprite-builds
 
-1. ✅ **Make the releases public** (Option 1) - This is the simplest and most user-friendly solution
-2. Verify accessibility by testing the download URLs
-3. Update the manifest note to remove the access restriction if releases are made public
-4. Consider adding a `ASEPRITE_BUILDS_TOKEN` secret (Option 2) for Excavator auto-updates
+# Should list branches and tags instead of "Authentication failed"
+```
 
-**For end users:**
+### Step 4: Install Aseprite via Scoop
 
-The manifest includes a note: "You may not use this package unless you are owner of this bucket, i.e. Luka Mamukashvili (USLTD)"
+Once authentication is configured, you can install aseprite:
 
-This indicates the package is intentionally restricted. Users should:
-1. Respect the license restrictions
-2. Only use if they have permission from the bucket owner
-3. Contact the bucket maintainer for access if needed
-
-## Testing After Configuration
-
-After implementing any solution, verify with:
-
-```bash
-# Test download URL accessibility
-curl -I -L "https://github.com/USLTD/aseprite-builds/releases/download/v1.3.16/aseprite-v1.3.16-windows-x64.zip"
-
-# Test with Scoop
+```powershell
+# Add this bucket if you haven't already
 scoop bucket add usltd https://github.com/USLTD/scoop-bucket
+
+# Install aseprite (will use your configured Git credentials)
 scoop install usltd/aseprite
 ```
 
-## Current Manifest Configuration
+### Step 5: Configure Automated Updates (Optional)
 
-The manifest uses:
-- **Version source**: Public official repository (`https://github.com/aseprite/aseprite`)
-- **Download URLs**: Private builds repository (`https://github.com/USLTD/aseprite-builds`)
-- **Autoupdate**: Configured to use private repository URLs
+For the Excavator workflow to automatically check for updates:
 
-This hybrid approach allows version checking without authentication but requires authentication for downloads.
+1. Go to `https://github.com/USLTD/scoop-bucket/settings/secrets/actions`
+2. Click **"New repository secret"**
+3. **Name**: `ASEPRITE_BUILDS_TOKEN`
+4. **Value**: Paste your PAT
+5. Click **"Add secret"**
+
+The Excavator workflow is already configured to use this token if available.
+
+## Troubleshooting
+
+### "Authentication failed" Error
+
+If you see authentication errors:
+
+1. Verify your PAT has the `repo` scope
+2. Check that the token hasn't expired
+3. Ensure you have access to the `USLTD/aseprite-builds` repository
+4. Test authentication with: `git ls-remote https://github.com/USLTD/aseprite-builds`
+
+### Downloads Still Failing
+
+If downloads fail even with authentication configured:
+
+1. Clear Scoop cache: `scoop cache rm aseprite`
+2. Verify Git credential helper: `git config --global credential.helper`
+3. Test manual download:
+   ```powershell
+   git clone https://github.com/USLTD/aseprite-builds test-auth
+   # Should succeed without prompting if credentials are cached
+   rm -r test-auth
+   ```
+
+### Token Security
+
+**Important**: Never commit your GitHub token to version control. Use:
+- Git Credential Manager (recommended)
+- Environment variables
+- Secure credential storage
+
+## Testing Access
+
+### For Authorized Users
+
+Run the verification script with your credentials configured:
+
+```powershell
+pwsh scripts/verify-aseprite-access.ps1
+```
+
+If properly authenticated, some tests should pass (API access may still fail depending on token scope).
+
+### For Unauthorized Users
+
+If you don't have access to the private repository, this is intentional. The manifest includes a notice:
+
+> "License Restriction: You may not use this package unless you are owner of this bucket, i.e. Luka Mamukashvili (USLTD)"
+
+To request access, contact the bucket owner.
+
+## Why Not Use nightly.link?
+
+The `nightly.link` service (used by `fiddler-everywhere-patched` and `dnspyex-nightly` manifests) cannot be used for aseprite because:
+
+1. **No Artifacts**: The build workflow in `USLTD/aseprite-builder` doesn't upload artifacts
+2. **Direct Releases Only**: Builds are uploaded directly as releases to the private repository
+3. **Intentional Design**: This prevents unauthorized access to compiled binaries
+
+## License Compliance
+
+This setup ensures compliance with Aseprite's Terms of Service:
+
+- ✅ Binaries are compiled from official source code
+- ✅ Binaries are not publicly distributed
+- ✅ Only authorized users can access the builds
+- ✅ Uses GitHub's unlimited Actions for compilation
 
 ## Additional Notes
 
 - Aseprite is proprietary software with a paid license
-- The builds are likely compiled from source and hosted privately
-- The current configuration suggests intentional access restriction
-- Any solution must respect the software license and usage terms
+- The builds are compiled from the official source repository
+- Access is intentionally restricted to comply with licensing terms
+- Users must have their own valid Aseprite license to use these builds
 
 ## Contact
 
-For questions or access requests, contact the bucket maintainer: Luka Mamukashvili (USLTD)
+For access requests or questions, contact the bucket maintainer: **Luka Mamukashvili (USLTD)**
+

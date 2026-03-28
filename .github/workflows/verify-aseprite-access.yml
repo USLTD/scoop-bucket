@@ -20,53 +20,66 @@ jobs:
           pwsh scripts/verify-aseprite-access.ps1 -Verbose
         continue-on-error: true
 
-      - name: Create Issue if Access Fails
-        if: failure()
+      - name: Check for ASEPRITE_BUILDS_TOKEN
+        id: check-token
+        run: |
+          if ("${{ secrets.ASEPRITE_BUILDS_TOKEN }}" -ne "") {
+            echo "has_token=true" >> $env:GITHUB_OUTPUT
+            Write-Host "ASEPRITE_BUILDS_TOKEN is configured"
+          } else {
+            echo "has_token=false" >> $env:GITHUB_OUTPUT
+            Write-Host "ASEPRITE_BUILDS_TOKEN is NOT configured (expected)"
+          }
+
+      - name: Create Issue if Token Missing
+        if: steps.check-token.outputs.has_token == 'false'
         uses: actions/github-script@v7
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
-            const title = '⚠️ Aseprite Repository Access Issue Detected';
-            const body = `## Aseprite Repository Access Verification Failed
+            const title = '⚠️ Aseprite Repository - Authentication Token Not Configured';
+            const body = `## Aseprite Repository Authentication Status
 
-            The automated access verification for the aseprite-builds repository has failed.
+            The \`ASEPRITE_BUILDS_TOKEN\` secret is not configured for the Excavator workflow.
 
-            ### What This Means
+            ### Current Status
 
-            The private repository \`https://github.com/USLTD/aseprite-builds\` is not accessible, which means:
-            - Users cannot install the aseprite package
-            - The Excavator auto-update workflow may fail
-            - Downloads will return 404 Not Found errors
+            - ✅ Private repository is working as designed
+            - ❌ Excavator auto-updates will fail without authentication token
+            - ❌ GitHub Actions cannot access the private repository
 
-            ### Actions Required
+            ### Why This Matters
 
-            Please choose one of the following solutions:
+            The \`aseprite-builds\` repository is intentionally private to comply with Aseprite's Terms of Service. However, for automated updates via Excavator to work, you need to configure a GitHub token.
 
-            1. **Make releases public (Recommended)**
-               - Go to https://github.com/USLTD/aseprite-builds/settings
-               - Ensure release assets are publicly accessible
-               - This allows downloads without authentication
+            ### Action Required (Repository Owner Only)
 
-            2. **Configure GitHub Token**
-               - Create a PAT with \`repo\` scope
-               - Add it as \`ASEPRITE_BUILDS_TOKEN\` secret
-               - Update workflows to use the token
+            1. **Create a Personal Access Token (PAT)**
+               - Go to https://github.com/settings/tokens
+               - Create a token with \`repo\` scope
+               - Copy the token
 
-            3. **Use GitHub Actions Artifacts**
-               - Switch to using nightly.link service
-               - See \`fiddler-everywhere-patched.json\` for example
+            2. **Add Token as Repository Secret**
+               - Go to https://github.com/${{ github.repository }}/settings/secrets/actions
+               - Click "New repository secret"
+               - Name: \`ASEPRITE_BUILDS_TOKEN\`
+               - Value: Paste your PAT
+               - Click "Add secret"
+
+            3. **Verify Configuration**
+               - Re-run this workflow: [Verify Aseprite Access](https://github.com/${{ github.repository }}/actions/workflows/verify-aseprite-access.yml)
+               - The issue should auto-close if configured correctly
+
+            ### For End Users
+
+            This does NOT affect end users who:
+            - Have their own Git credentials configured
+            - Have been granted direct access to the private repository
+            - Follow the setup guide in [ASEPRITE_ACCESS_SETUP.md](./ASEPRITE_ACCESS_SETUP.md)
 
             ### Documentation
 
-            For detailed instructions, see:
-            - [ASEPRITE_ACCESS_SETUP.md](./ASEPRITE_ACCESS_SETUP.md)
-
-            ### Verification
-
-            Run the verification script locally:
-            \`\`\`powershell
-            pwsh scripts/verify-aseprite-access.ps1
-            \`\`\`
+            - [ASEPRITE_ACCESS_SETUP.md](./ASEPRITE_ACCESS_SETUP.md) - Complete setup guide
 
             ---
             *This issue was automatically created by the Verify Aseprite Access workflow.*
@@ -87,20 +100,20 @@ jobs:
                 repo: context.repo.repo,
                 title: title,
                 body: body,
-                labels: ['aseprite-access', 'bug', 'private-repo']
+                labels: ['aseprite-access', 'configuration', 'automated-updates']
               });
-              console.log('Created new issue for aseprite access failure');
+              console.log('Created new issue for aseprite token configuration');
             } else {
               console.log('Issue already exists, skipping creation');
             }
 
-      - name: Comment on Success
-        if: success()
+      - name: Close Issue if Token Configured
+        if: steps.check-token.outputs.has_token == 'true'
         uses: actions/github-script@v7
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
-            // If access verification succeeds, close any open issues
+            // If token is configured, close any open issues
             const issues = await github.rest.issues.listForRepo({
               owner: context.repo.owner,
               repo: context.repo.repo,
@@ -113,7 +126,7 @@ jobs:
                 owner: context.repo.owner,
                 repo: context.repo.repo,
                 issue_number: issue.number,
-                body: '✅ Access verification succeeded! The aseprite-builds repository is now accessible.\n\n*Verified by workflow run: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}*'
+                body: '✅ ASEPRITE_BUILDS_TOKEN is now configured! Excavator should be able to check for updates automatically.\n\n*Verified by workflow run: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}*'
               });
 
               await github.rest.issues.update({
@@ -125,3 +138,4 @@ jobs:
 
               console.log(`Closed issue #${issue.number}`);
             }
+
