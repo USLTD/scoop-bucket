@@ -38,5 +38,21 @@
             }
         }
     },
-    "notes": "You may not use this package unless you are owner of this bucket, i.e. Luka Mamukashvili (USLTD)"
+    "notes": [
+        "⚠️  PRIVATE REPOSITORY ACCESS REQUIRED ⚠️",
+        "",
+        "This manifest downloads from a private repository: https://github.com/USLTD/aseprite-builds",
+        "",
+        "Current Status: ❌ Repository is NOT publicly accessible",
+        "",
+        "To use this manifest, the repository owner must:",
+        "  1. Make releases public (recommended), OR",
+        "  2. Configure GitHub token with repository access, OR",
+        "  3. Switch to using GitHub Actions artifacts via nightly.link",
+        "",
+        "For detailed setup instructions, see: ASEPRITE_ACCESS_SETUP.md",
+        "To verify access, run: pwsh scripts/verify-aseprite-access.ps1",
+        "",
+        "License Restriction: You may not use this package unless you are owner of this bucket, i.e. Luka Mamukashvili (USLTD)"
+    ]
 }

@@ -5,6 +5,18 @@
 
 Template bucket for [Scoop](https://scoop.sh), the Windows command-line installer.
 
+## Important Notice: Private Repository Access
+
+⚠️ **Some manifests in this bucket reference private repositories and may not be publicly accessible.**
+
+Specifically, the `aseprite` manifest references `https://github.com/USLTD/aseprite-builds` (private repository).
+
+**Current Status:** The repository is NOT publicly accessible and requires configuration.
+
+For setup instructions and troubleshooting, see:
+- [ASEPRITE_ACCESS_SETUP.md](./ASEPRITE_ACCESS_SETUP.md) - Detailed configuration guide
+- Run `pwsh scripts/verify-aseprite-access.ps1` to test accessibility
+
 ## How do I use this template?
 
 1. Generate your own copy of this repository with the "Use this template"
