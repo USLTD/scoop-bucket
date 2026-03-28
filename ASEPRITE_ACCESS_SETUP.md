@@ -116,17 +116,17 @@ scoop bucket add usltd https://github.com/USLTD/scoop-bucket
 scoop install usltd/aseprite
 ```
 
-### Step 5: Configure Automated Updates (Optional)
+### Step 5: Configure Automated Updates (REQUIRED for Repository Owner)
 
-For the Excavator workflow to automatically check for updates:
+⚠️ **REQUIRED**: For the Excavator workflow to automatically check for updates, you MUST configure the `ASEPRITE_BUILDS_TOKEN` secret. Without this token, the Excavator workflow will fail with 404 errors when trying to check for aseprite updates.
 
 1. Go to `https://github.com/USLTD/scoop-bucket/settings/secrets/actions`
 2. Click **"New repository secret"**
 3. **Name**: `ASEPRITE_BUILDS_TOKEN`
-4. **Value**: Paste your PAT
+4. **Value**: Paste your PAT (the same token from Step 1)
 5. Click **"Add secret"**
 
-The Excavator workflow is already configured to use this token if available.
+The Excavator workflow has been configured to use `ASEPRITE_BUILDS_TOKEN` (if available) or fall back to `SCOOP_GH_TOKEN`. This ensures the workflow can access the private `aseprite-builds` repository to check for updates and download release information.
 
 ## Troubleshooting
 
