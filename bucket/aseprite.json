@@ -38,21 +38,5 @@
             }
         }
     },
-    "notes": [
-        "⚠️  PRIVATE REPOSITORY - AUTHENTICATION REQUIRED ⚠️",
-        "",
-        "This manifest requires access to a private repository: https://github.com/USLTD/aseprite-builds",
-        "",
-        "Why Private? To comply with Aseprite's Terms of Service which prohibit redistribution of compiled binaries.",
-        "",
-        "For Authorized Users:",
-        "  1. Create a GitHub Personal Access Token (PAT) with 'repo' scope",
-        "  2. Configure Git credentials (see ASEPRITE_ACCESS_SETUP.md for detailed steps)",
-        "  3. Install normally: scoop install usltd/aseprite",
-        "",
-        "Setup Guide: See ASEPRITE_ACCESS_SETUP.md for complete authentication instructions",
-        "Verify Access: Run 'pwsh scripts/verify-aseprite-access.ps1' to test your configuration",
-        "",
-        "License: You must own a valid Aseprite license and be authorized by the bucket owner (Luka Mamukashvili / USLTD) to use this package."
-    ]
+    "notes": "You may not use this package unless you are owner of this bucket, i.e. Luka Mamukashvili (USLTD)"
 }
