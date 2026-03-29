@@ -26,7 +26,7 @@
         ]
     ],
     "checkver": {
-        "github": "https://github.com/aseprite/aseprite"
+        "github": "https://github.com/USLTD/aseprite-builds"
     },
     "autoupdate": {
         "architecture": {
