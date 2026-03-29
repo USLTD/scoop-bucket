@@ -1,5 +1,5 @@
 {
-    "version": "v1.3.16",
+    "version": "v1.3.17",
     "description": "Animated sprite editor & pixel art tool",
     "homepage": "https://www.aseprite.org",
     "license": {
@@ -8,10 +8,10 @@
     },
     "architecture": {
         "64bit": {
-            "url": "https://github.com/USLTD/aseprite-builds/releases/download/v1.3.16/aseprite-v1.3.16-windows-x64.zip"
+            "url": "https://github.com/USLTD/aseprite-builds/releases/download/v1.3.17/aseprite-v1.3.17-windows-x64.zip"
         },
         "32bit": {
-            "url": "https://github.com/USLTD/aseprite-builds/releases/download/v1.3.16/aseprite-v1.3.16-windows-x86.zip"
+            "url": "https://github.com/USLTD/aseprite-builds/releases/download/v1.3.17/aseprite-v1.3.17-windows-x86.zip"
         }
     },
     "bin": [
@@ -26,15 +26,9 @@
     "checkver": {
         "github": "https://github.com/aseprite/aseprite"
     },
-    "autoupdate": {
-        "architecture": {
-            "64bit": {
-                "url": "https://github.com/USLTD/aseprite-builds/releases/download/$version/aseprite-$version-windows-x64.zip"
-            },
-            "32bit": {
-                "url": "https://github.com/USLTD/aseprite-builds/releases/download/$version/aseprite-$version-windows-x86.zip"
-            }
-        }
-    },
-    "notes": "You may not use this package unless you are owner of this bucket, i.e. Luka Mamukashvili (USLTD)"
+    "notes": [
+        "You may not use this package unless you are owner of this bucket, i.e. Luka Mamukashvili (USLTD)",
+        "This manifest requires manual updates due to private repository restrictions.",
+        "Autoupdate has been disabled because Excavator cannot access the private aseprite-builds repository to compute hashes."
+    ]
 }
