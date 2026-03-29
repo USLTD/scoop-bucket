@@ -26,7 +26,8 @@
         ]
     ],
     "checkver": {
-        "github": "https://github.com/USLTD/aseprite-builds"
+        "url": "https://github.com/USLTD/aseprite-builds/releases/latest",
+        "regex": "/releases/tag/(v[\\d.]+)"
     },
     "autoupdate": {
         "architecture": {
