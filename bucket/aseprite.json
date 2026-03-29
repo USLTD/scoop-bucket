@@ -8,12 +8,10 @@
     },
     "architecture": {
         "64bit": {
-            "url": "https://github.com/USLTD/aseprite-builds/releases/download/v1.3.16/aseprite-v1.3.16-windows-x64.zip",
-            "hash": "sha256:8f6de9b87e64908a0c967274bf9d09ebdc4d9069de974cca87da697e372a1d75"
+            "url": "https://github.com/USLTD/aseprite-builds/releases/download/v1.3.16/aseprite-v1.3.16-windows-x64.zip"
         },
         "32bit": {
-            "url": "https://github.com/USLTD/aseprite-builds/releases/download/v1.3.16/aseprite-v1.3.16-windows-x86.zip",
-            "hash": "sha256:818fcd42c1ef756cf129cdba919a8371702e7df95fa13fbdc847d47f51a5a2d6"
+            "url": "https://github.com/USLTD/aseprite-builds/releases/download/v1.3.16/aseprite-v1.3.16-windows-x86.zip"
         }
     },
     "bin": [
@@ -26,7 +24,7 @@
         ]
     ],
     "checkver": {
-        "url": "https://github.com/USLTD/aseprite-builds/releases/latest",
+        "url": "https://github.com/aseprite/aseprite/releases/latest",
         "regex": "/releases/tag/(v[\\d.]+)"
     },
     "autoupdate": {
