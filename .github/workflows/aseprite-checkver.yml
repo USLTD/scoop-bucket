@@ -1,0 +1,85 @@
+name: Aseprite Version Check
+
+on:
+  workflow_dispatch:
+  schedule:
+    # Run every 24 hours
+    - cron: '0 */24 * * *'
+
+jobs:
+  check-version:
+    name: Check Aseprite Version
+    runs-on: windows-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@main
+
+      - name: Check for new version
+        id: checkver
+        shell: pwsh
+        run: |
+          # Get current version from manifest
+          $manifest = Get-Content -Path "bucket/aseprite.json" -Raw | ConvertFrom-Json
+          $currentVersion = $manifest.version
+          Write-Output "Current version in manifest: $currentVersion"
+
+          # Get latest version from GitHub
+          $latestRelease = Invoke-RestMethod -Uri "https://api.github.com/repos/aseprite/aseprite/releases/latest"
+          $latestVersion = $latestRelease.tag_name
+          Write-Output "Latest version on GitHub: $latestVersion"
+
+          # Compare versions
+          if ($currentVersion -ne $latestVersion) {
+            Write-Output "new_version_available=true" >> $env:GITHUB_OUTPUT
+            Write-Output "current_version=$currentVersion" >> $env:GITHUB_OUTPUT
+            Write-Output "latest_version=$latestVersion" >> $env:GITHUB_OUTPUT
+            Write-Output "::notice::New Aseprite version available: $latestVersion (current: $currentVersion)"
+          } else {
+            Write-Output "new_version_available=false" >> $env:GITHUB_OUTPUT
+            Write-Output "::notice::Aseprite is up to date: $currentVersion"
+          }
+
+      - name: Create issue for new version
+        if: steps.checkver.outputs.new_version_available == 'true'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const currentVersion = '${{ steps.checkver.outputs.current_version }}';
+            const latestVersion = '${{ steps.checkver.outputs.latest_version }}';
+
+            // Check if issue already exists
+            const issues = await github.rest.issues.listForRepo({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              state: 'open',
+              labels: 'aseprite-update'
+            });
+
+            const existingIssue = issues.data.find(issue =>
+              issue.title.includes(latestVersion)
+            );
+
+            if (existingIssue) {
+              console.log(`Issue already exists for version ${latestVersion}: #${existingIssue.number}`);
+            } else {
+              // Create new issue
+              const issue = await github.rest.issues.create({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                title: `Update aseprite to ${latestVersion}`,
+                body: `A new version of Aseprite is available!\n\n` +
+                      `**Current version:** ${currentVersion}\n` +
+                      `**New version:** ${latestVersion}\n\n` +
+                      `### Manual Update Required\n\n` +
+                      `Since aseprite uses a private repository, automatic updates are not possible. ` +
+                      `Please update the manifest manually:\n\n` +
+                      `1. Update the \`version\` field to \`${latestVersion}\`\n` +
+                      `2. Update the URLs in the \`architecture\` section to use \`${latestVersion}\`\n` +
+                      `3. Ensure the aseprite-builds repository has a release for \`${latestVersion}\`\n` +
+                      `4. Test the installation\n` +
+                      `5. Commit and push the changes\n\n` +
+                      `**Release notes:** https://github.com/aseprite/aseprite/releases/tag/${latestVersion}`,
+                labels: ['aseprite-update', 'manual-update-required']
+              });
+              console.log(`Created issue #${issue.data.number} for version ${latestVersion}`);
+            }
