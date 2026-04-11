@@ -23,6 +23,9 @@
             "Aseprite"
         ]
     ],
+    "persist": [
+        "aseprite-thumbnailer.dll"
+    ],
     "checkver": {
         "github": "https://github.com/aseprite/aseprite"
     },
