@@ -6,6 +6,9 @@ on:
     # Run every 24 hours
     - cron: '0 */24 * * *'
 
+permissions:
+  contents: write
+
 jobs:
   check-version:
     name: Check Aseprite Version
@@ -23,8 +26,8 @@ jobs:
           $currentVersion = $manifest.version
           Write-Output "Current version in manifest: $currentVersion"
 
-          # Get latest version from GitHub
-          $latestRelease = Invoke-RestMethod -Uri "https://api.github.com/repos/aseprite/aseprite/releases/latest"
+          # Get latest version from the builds repository
+          $latestRelease = Invoke-RestMethod -Uri "https://api.github.com/repos/USLTD/aseprite-builds/releases/latest"
           $latestVersion = $latestRelease.tag_name
           Write-Output "Latest version on GitHub: $latestVersion"
 
@@ -39,47 +42,50 @@ jobs:
             Write-Output "::notice::Aseprite is up to date: $currentVersion"
           }
 
-      - name: Create issue for new version
+      - name: Update manifest for new version
         if: steps.checkver.outputs.new_version_available == 'true'
-        uses: actions/github-script@v7
-        with:
-          script: |
-            const currentVersion = '${{ steps.checkver.outputs.current_version }}';
-            const latestVersion = '${{ steps.checkver.outputs.latest_version }}';
+        shell: pwsh
+        env:
+          LATEST_VERSION: ${{ steps.checkver.outputs.latest_version }}
+        run: |
+          $manifestPath = "bucket/aseprite.json"
+          $version = $env:LATEST_VERSION
 
-            // Check if issue already exists
-            const issues = await github.rest.issues.listForRepo({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              state: 'open',
-              labels: 'aseprite-update'
-            });
+          Write-Output "Updating manifest to version $version"
 
-            const existingIssue = issues.data.find(issue =>
-              issue.title.includes(latestVersion)
-            );
+          $content = Get-Content -Path $manifestPath -Raw
+          $updated = $content
 
-            if (existingIssue) {
-              console.log(`Issue already exists for version ${latestVersion}: #${existingIssue.number}`);
-            } else {
-              // Create new issue
-              const issue = await github.rest.issues.create({
-                owner: context.repo.owner,
-                repo: context.repo.repo,
-                title: `Update aseprite to ${latestVersion}`,
-                body: `A new version of Aseprite is available!\n\n` +
-                      `**Current version:** ${currentVersion}\n` +
-                      `**New version:** ${latestVersion}\n\n` +
-                      `### Manual Update Required\n\n` +
-                      `Since aseprite uses a private repository, automatic updates are not possible. ` +
-                      `Please update the manifest manually:\n\n` +
-                      `1. Update the \`version\` field to \`${latestVersion}\`\n` +
-                      `2. Update the URLs in the \`architecture\` section to use \`${latestVersion}\`\n` +
-                      `3. Ensure the aseprite-builds repository has a release for \`${latestVersion}\`\n` +
-                      `4. Test the installation\n` +
-                      `5. Commit and push the changes\n\n` +
-                      `**Release notes:** https://github.com/aseprite/aseprite/releases/tag/${latestVersion}`,
-                labels: ['aseprite-update', 'manual-update-required']
-              });
-              console.log(`Created issue #${issue.data.number} for version ${latestVersion}`);
-            }
+          # Escape $ in replacement strings to avoid PowerShell regex backreference substitution
+          $safeVersion = $version -replace '\$', '$$$$'
+
+          $updated = $updated -replace '(?m)(^\s*"version"\s*:\s*")[^"]+(")', "`$1$safeVersion`$2"
+
+          $url64 = "https://github.com/USLTD/aseprite-builds/releases/download/$version/aseprite-$version-windows-x64.zip"
+          $url32 = "https://github.com/USLTD/aseprite-builds/releases/download/$version/aseprite-$version-windows-x86.zip"
+          $safeUrl64 = $url64 -replace '\$', '$$$$'
+          $safeUrl32 = $url32 -replace '\$', '$$$$'
+
+          $updated = $updated -replace 'https://github.com/USLTD/aseprite-builds/releases/download/[^/]+/aseprite-[^/]+-windows-x64\.zip', $safeUrl64
+          $updated = $updated -replace 'https://github.com/USLTD/aseprite-builds/releases/download/[^/]+/aseprite-[^/]+-windows-x86\.zip', $safeUrl32
+
+          if ($updated -eq $content) {
+            Write-Warning "No manifest changes were applied."
+          } else {
+            $updated | Set-Content -Path $manifestPath -Encoding UTF8
+            Write-Output "Manifest updated."
+          }
+
+      - name: Commit manifest update
+        if: steps.checkver.outputs.new_version_available == 'true' && github.ref == 'refs/heads/main'
+        shell: pwsh
+        env:
+          LATEST_VERSION: ${{ steps.checkver.outputs.latest_version }}
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          git add bucket/aseprite.json
+          $version = $env:LATEST_VERSION
+          git commit -m "aseprite: update to $version" || Write-Output "No changes to commit"
+          git push
