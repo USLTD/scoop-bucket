@@ -23,6 +23,7 @@
             "Aseprite"
         ]
     ],
+    "pre_install": "if (!(Test-Path \"$dir\\aseprite-thumbnailer.dll\")) { New-Item \"$dir\\aseprite-thumbnailer.dll\" -ItemType File -Force | Out-Null }",
     "persist": [
         "aseprite-thumbnailer.dll"
     ],
