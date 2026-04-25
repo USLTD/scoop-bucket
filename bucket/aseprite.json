@@ -1,5 +1,5 @@
 {
-    "version": "v1.3.17",
+    "version": "v1.3.17.1",
     "description": "Animated sprite editor & pixel art tool",
     "homepage": "https://www.aseprite.org",
     "license": {
@@ -8,10 +8,10 @@
     },
     "architecture": {
         "64bit": {
-            "url": "https://github.com/USLTD/aseprite-builds/releases/download/v1.3.17/aseprite-v1.3.17-windows-x64.zip"
+            "url": "https://github.com/USLTD/aseprite-builds/releases/download/v1.3.17.1/aseprite-v1.3.17.1-windows-x64.zip"
         },
         "32bit": {
-            "url": "https://github.com/USLTD/aseprite-builds/releases/download/v1.3.17/aseprite-v1.3.17-windows-x86.zip"
+            "url": "https://github.com/USLTD/aseprite-builds/releases/download/v1.3.17.1/aseprite-v1.3.17.1-windows-x86.zip"
         }
     },
     "bin": [
@@ -35,3 +35,4 @@
         "Autoupdate has been disabled because Excavator cannot access the private aseprite-builds repository to compute hashes."
     ]
 }
+
