@@ -26,6 +26,9 @@
     "persist": [
         "aseprite-thumbnailer.dll"
     ],
+    "suggest": {
+        "Aseprite Thumbnailer": "aseprite-thumbnailer"
+    },
     "checkver": {
         "github": "https://github.com/aseprite/aseprite"
     },
