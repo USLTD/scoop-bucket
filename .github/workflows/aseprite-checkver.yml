@@ -73,16 +73,19 @@ jobs:
           } else {
             Write-Warning "No changes applied."
           }
-
       - name: Commit and push
         if: steps.checkver.outputs.new_version_available == 'true'
         shell: pwsh
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-
+      
           git add bucket/aseprite.json
+      
+          if (git diff --cached --quiet) {
+            Write-Output "No changes to commit"
+            exit 0
+          }
+      
           git commit -m "aseprite: update to ${{ steps.checkver.outputs.latest_version }}"
-
-          git pushWrite-Output "No changes to commit"
           git push
