@@ -3,8 +3,8 @@ name: Aseprite Version Check
 on:
   workflow_dispatch:
   schedule:
-    # Run every 24 hours
-    - cron: '0 */24 * * *'
+    # run every 4 hours
+    - cron: '20 */4 * * *'
 
 permissions:
   contents: write
@@ -17,28 +17,34 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@main
 
-      - name: Check for new version
+      - name: Check Aseprite version
         id: checkver
         shell: pwsh
+        env:
+          GH_TOKEN: ${{ secrets.ASEPRITE_BUILDS_TOKEN }}
         run: |
           # Get current version from manifest
           $manifest = Get-Content -Path "bucket/aseprite.json" -Raw | ConvertFrom-Json
           $currentVersion = $manifest.version
           Write-Output "Current version in manifest: $currentVersion"
-
-          # Get latest version from the builds repository
-          $latestRelease = Invoke-RestMethod -Uri "https://api.github.com/repos/USLTD/aseprite-builds/releases/latest"
-          $latestVersion = $latestRelease.tag_name
-          Write-Output "Latest version on GitHub: $latestVersion"
-
+      
+          # Get latest version from private repo via gh
+          try {
+            $latestVersion = gh api repos/USLTD/aseprite-builds/releases/latest --jq ".tag_name"
+            Write-Output "Latest version on GitHub: $latestVersion"
+          } catch {
+            Write-Error "Failed to fetch latest release. Check token permissions."
+            exit 1
+          }
+      
           # Compare versions
           if ($currentVersion -ne $latestVersion) {
-            Write-Output "new_version_available=true" >> $env:GITHUB_OUTPUT
-            Write-Output "current_version=$currentVersion" >> $env:GITHUB_OUTPUT
-            Write-Output "latest_version=$latestVersion" >> $env:GITHUB_OUTPUT
+            "new_version_available=true" >> $env:GITHUB_OUTPUT
+            "current_version=$currentVersion" >> $env:GITHUB_OUTPUT
+            "latest_version=$latestVersion" >> $env:GITHUB_OUTPUT
             Write-Output "::notice::New Aseprite version available: $latestVersion (current: $currentVersion)"
           } else {
-            Write-Output "new_version_available=false" >> $env:GITHUB_OUTPUT
+            "new_version_available=false" >> $env:GITHUB_OUTPUT
             Write-Output "::notice::Aseprite is up to date: $currentVersion"
           }
 
