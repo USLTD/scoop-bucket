@@ -8,6 +8,7 @@ on:
 
 permissions:
   contents: write
+
 jobs:
   checkver:
     runs-on: windows-2025
