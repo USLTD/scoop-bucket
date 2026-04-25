@@ -8,16 +8,15 @@ on:
 
 permissions:
   contents: write
-
 jobs:
-  check-version:
-    name: Check Aseprite Version
-    runs-on: windows-latest
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@main
+  checkver:
+    runs-on: windows-2025
 
-      - name: Check Aseprite version
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Check latest version
         id: checkver
         shell: pwsh
         env:
@@ -27,16 +26,11 @@ jobs:
           $manifest = Get-Content -Path "bucket/aseprite.json" -Raw | ConvertFrom-Json
           $currentVersion = $manifest.version
           Write-Output "Current version in manifest: $currentVersion"
-      
-          # Get latest version from private repo via gh
-          try {
-            $latestVersion = gh api repos/USLTD/aseprite-builds/releases/latest --jq ".tag_name"
-            Write-Output "Latest version on GitHub: $latestVersion"
-          } catch {
-            Write-Error "Failed to fetch latest release. Check token permissions."
-            exit 1
-          }
-      
+
+          # Get latest version from private repo
+          $latestVersion = gh api repos/USLTD/aseprite-builds/releases/latest --jq ".tag_name"
+          Write-Output "Latest version on GitHub: $latestVersion"
+
           # Compare versions
           if ($currentVersion -ne $latestVersion) {
             "new_version_available=true" >> $env:GITHUB_OUTPUT
@@ -48,7 +42,7 @@ jobs:
             Write-Output "::notice::Aseprite is up to date: $currentVersion"
           }
 
-      - name: Update manifest for new version
+      - name: Update manifest
         if: steps.checkver.outputs.new_version_available == 'true'
         shell: pwsh
         env:
@@ -62,36 +56,32 @@ jobs:
           $content = Get-Content -Path $manifestPath -Raw
           $updated = $content
 
-          # Escape $ in replacement strings to avoid PowerShell regex backreference substitution
-          $safeVersion = $version -replace '\$', '$$$$'
+          # Update version field
+          $updated = $updated -replace '(?m)(^\s*"version"\s*:\s*")[^"]+(")', "`$1$version`$2"
 
-          $updated = $updated -replace '(?m)(^\s*"version"\s*:\s*")[^"]+(")', "`$1$safeVersion`$2"
-
+          # Update URLs
           $url64 = "https://github.com/USLTD/aseprite-builds/releases/download/$version/aseprite-$version-windows-x64.zip"
           $url32 = "https://github.com/USLTD/aseprite-builds/releases/download/$version/aseprite-$version-windows-x86.zip"
-          $safeUrl64 = $url64 -replace '\$', '$$$$'
-          $safeUrl32 = $url32 -replace '\$', '$$$$'
 
-          $updated = $updated -replace 'https://github.com/USLTD/aseprite-builds/releases/download/[^/]+/aseprite-[^/]+-windows-x64\.zip', $safeUrl64
-          $updated = $updated -replace 'https://github.com/USLTD/aseprite-builds/releases/download/[^/]+/aseprite-[^/]+-windows-x86\.zip', $safeUrl32
+          $updated = $updated -replace 'https://github.com/USLTD/aseprite-builds/releases/download/[^/]+/aseprite-[^/]+-windows-x64\.zip', $url64
+          $updated = $updated -replace 'https://github.com/USLTD/aseprite-builds/releases/download/[^/]+/aseprite-[^/]+-windows-x86\.zip', $url32
 
-          if ($updated -eq $content) {
-            Write-Warning "No manifest changes were applied."
-          } else {
+          if ($updated -ne $content) {
             $updated | Set-Content -Path $manifestPath -Encoding UTF8
             Write-Output "Manifest updated."
+          } else {
+            Write-Warning "No changes applied."
           }
 
-      - name: Commit manifest update
-        if: steps.checkver.outputs.new_version_available == 'true' && github.ref == 'refs/heads/main'
+      - name: Commit and push
+        if: steps.checkver.outputs.new_version_available == 'true'
         shell: pwsh
-        env:
-          LATEST_VERSION: ${{ steps.checkver.outputs.latest_version }}
         run: |
           git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
 
           git add bucket/aseprite.json
-          $version = $env:LATEST_VERSION
-          git commit -m "aseprite: update to $version" || Write-Output "No changes to commit"
+          git commit -m "aseprite: update to ${{ steps.checkver.outputs.latest_version }}"
+
+          git pushWrite-Output "No changes to commit"
           git push
