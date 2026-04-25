@@ -4,6 +4,7 @@
     "homepage": "https://www.aseprite.org",
     "license": "Proprietary",
     "url": "https://aseprite.org/downloads/aseprite-thumbnailer-v1.3.1.zip",
+    "hash": "77496bcb8da11c20d6a2926770522f45cee489ab4b5551dadc76da42cc186233",
     "extract_dir": "aseprite-thumbnailer",
     "depends": "aseprite",
     "post_install": [
