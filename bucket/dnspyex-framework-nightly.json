@@ -1,10 +1,10 @@
 {
-    "version": "2026-04-27-run793-id25011793829",
+    "version": "2026-04-29-run794-id25127160299",
     "description": "Revival of the well known .NET debugger and assembly editor, dnSpy",
     "homepage": "https://github.com/dnSpyEx/dnSpy",
     "license": "GPL-3.0-only",
-    "url": "https://nightly.link/dnSpyEx/dnSpy/actions/runs/25011793829/dnSpy-netframework.zip",
-    "hash": "8a86bc09c1a23472cfe4db5c413c9c7ecc3856d86962ebfbec1247369614d8f0",
+    "url": "https://nightly.link/dnSpyEx/dnSpy/actions/runs/25127160299/dnSpy-netframework.zip",
+    "hash": "c1251c1af7f961be1c3628bc0a6d46938d46cc141380014e93b3fc5a2a4e8849",
     "architecture": {
         "64bit": {
             "bin": [
